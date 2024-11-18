@@ -14,11 +14,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final String googleMapsApiKey = 'AIzaSyDOMvLfM-OzXHAZRZrDq24npHqm1u7Rve0';
+class _HomeScreenState extends State<HomeScreen> {  
   late Future<WeatherResponse> futureWeather;
-  bool _isLoading = true; // Variable para el estado de carga
-
   @override
   void initState() {
     super.initState();
@@ -73,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Colors.white,),
               );
             } else if (snapshot.hasError) {
               return Center(
@@ -99,18 +96,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: ElevatedButton(
-                          onPressed: _getLocationAndFetchWeather,
+                          onPressed: (){
+                            Navigator.pushNamed(context, 'buscar');
+                          },
                           child: const Row(
                             children: [
                               Icon(
                                 Icons.location_on,
-                                color: Color(0xffacbaef),
+                                color: Color(0xff123597),
                                 size: 20,
                               ),
                               Text(
                                 'Buscar Ubicación',
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Color(0xff123597),
                                   fontSize: 12,
                                 ),
                               ),

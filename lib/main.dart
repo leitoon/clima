@@ -15,12 +15,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Clima App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff123597)),
         useMaterial3: true,
       ),
       initialRoute: 'home', // Verifica el estado y establece la ruta inicial
         routes: {
           'home': (_) => HomeScreen(),
+          'buscar': (_) => BuscarScreen(),
         },
     );
   }

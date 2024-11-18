@@ -18,15 +18,15 @@ class ResumenClima extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 0.1*size.height,
-      width: 0.24*size.width,
+      width: 0.26*size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(icono, color: Colors.white,size: 20, ),
           Text(titulo,style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
-                  letterSpacing: -0.8
+                  fontSize: 13,
+                  letterSpacing: -0.9
                 ),),
                 Text(informacion,style: const TextStyle(
                   color: Colors.white,
