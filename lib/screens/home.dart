@@ -1,13 +1,9 @@
-
-
-
 import 'package:clima/models/climamodelo.dart';
 import 'package:clima/otros/obtenerclimaimg.dart';
 import 'package:clima/peticiones/getclima.dart';
+import 'package:clima/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-
-import '../widgets/gradientBackground.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -88,10 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     weather.name,
                     style: const TextStyle(
-                      fontSize: 32,
-                      color: Colors.white,
-                      letterSpacing: -0.5
-                    ),
+                        fontSize: 32, color: Colors.white, letterSpacing: -0.5),
                   ),
                   SizedBox(
                     width: 0.45 * size.width,
@@ -127,18 +120,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            
                             SizedBox(
                               height: 0.14 * size.height,
                               width: 0.3 * size.width,
-                              child:
-                              
-                               Image.asset(       
+                              child: Image.asset(
                                 getWeatherImageById(weather.weather[0].id),
                                 fit: BoxFit.contain,
                               ),
                             ),
-                            SizedBox(width: 0.05*size.width,),
+                            SizedBox(
+                              width: 0.05 * size.width,
+                            ),
                             Text(
                               '${weather.main.temp.round()}°C',
                               style: const TextStyle(
@@ -166,46 +158,72 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 0.02*size.height,),
+                  SizedBox(
+                    height: 0.02 * size.height,
+                  ),
                   Container(
                     height: 0.3 * size.height,
                     width: 0.856 * size.width,
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color.fromARGB(41, 255, 255, 255)),
-                      borderRadius: BorderRadius.circular(18.81),
-                      color: const Color.fromARGB(41, 255, 255, 255)
-                    ),
+                        border: Border.all(
+                            color: const Color.fromARGB(41, 255, 255, 255)),
+                        borderRadius: BorderRadius.circular(18.81),
+                        color: const Color.fromARGB(41, 255, 255, 255)),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Resumen:',style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:15,
-                                ),),
+                          const Text(
+                            'Resumen:',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              ResumenClima(size: size, informacion: '${weather.main.humidity}%', titulo: 'Humedad', icono: Icons.water_drop_outlined,),
-                              ResumenClima(size: size, informacion: '${weather.main.pressure} hPa', titulo: 'Presión', icono: Icons.compress,),
-                              ResumenClima(size: size, informacion: '${weather.wind.speed} m/s', titulo: 'Viento', icono: Icons.air,),
+                              ResumenClima(
+                                size: size,
+                                informacion: '${weather.main.humidity}%',
+                                titulo: 'Humedad',
+                                icono: Icons.water_drop_outlined,
+                              ),
+                              ResumenClima(
+                                size: size,
+                                informacion: '${weather.main.pressure} hPa',
+                                titulo: 'Presión',
+                                icono: Icons.compress,
+                              ),
+                              ResumenClima(
+                                size: size,
+                                informacion: '${weather.wind.speed} m/s',
+                                titulo: 'Viento',
+                                icono: Icons.air,
+                              ),
                             ],
                           ),
-                          
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              ResumenClima(size: size, informacion: '${weather.main.feelsLike.round()}°C', titulo: 'S. térmica', icono: Icons.sunny,), 
-                              ResumenClima(size: size, informacion: '${weather.clouds.all}%', titulo: 'Nubosidad', icono: Icons.cloud,), 
+                              ResumenClima(
+                                size: size,
+                                informacion:
+                                    '${weather.main.feelsLike.round()}°C',
+                                titulo: 'S. térmica',
+                                icono: Icons.sunny,
+                              ),
+                              ResumenClima(
+                                size: size,
+                                informacion: '${weather.clouds.all}%',
+                                titulo: 'Nubosidad',
+                                icono: Icons.cloud,
+                              ),
                             ],
                           ),
-                          
-                          
-                          
-                         
                         ],
                       ),
                     ),
@@ -216,43 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
             return const SizedBox.shrink();
           },
         ),
-      ),
-    );
-  }
-}
-
-class ResumenClima extends StatelessWidget {
-  const ResumenClima({
-    super.key,
-    required this.size,
-    required this.informacion, required this.titulo, required this.icono,
-  });
-
-  final Size size;
-  final String informacion;
-  final String titulo;
-  final IconData icono;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 0.1*size.height,
-      width: 0.23*size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icono, color: Colors.white,size: 19, ),
-          Text(titulo,style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  letterSpacing: -0.8
-                ),),
-                Text(informacion,style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold
-                ),),
-        ],
       ),
     );
   }

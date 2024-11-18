@@ -1,5 +1,4 @@
 
-
 String getWeatherImageById(int id) {
   if (id >= 200 && id <= 232) {
     return 'assets/images/relampago.png'; // Tormenta eléctrica
