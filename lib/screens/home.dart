@@ -3,7 +3,9 @@ import 'package:clima/otros/obtenerclimaimg.dart';
 import 'package:clima/peticiones/getclima.dart';
 import 'package:clima/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,13 +15,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final String googleMapsApiKey = 'AIzaSyDOMvLfM-OzXHAZRZrDq24npHqm1u7Rve0';
   late Future<WeatherResponse> futureWeather;
+  bool _isLoading = true; // Variable para el estado de carga
 
   @override
   void initState() {
     super.initState();
     // Inicializamos la futura consulta del clima basada en la ubicación.
     futureWeather = _getLocationAndFetchWeather();
+    // Configuración del controlador WebViewController
   }
 
   Future<WeatherResponse> _getLocationAndFetchWeather() async {
@@ -79,156 +84,196 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else if (snapshot.hasData) {
               final weather = snapshot.data!;
-              return Column(
-                children: [
-                  Text(
-                    weather.name,
-                    style: const TextStyle(
-                        fontSize: 32, color: Colors.white, letterSpacing: -0.5),
-                  ),
-                  SizedBox(
-                    width: 0.45 * size.width,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: ElevatedButton(
-                        onPressed: _getLocationAndFetchWeather,
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Color(0xffacbaef),
-                              size: 20,
-                            ),
-                            Text(
-                              'Buscar Ubicación',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+              return SingleChildScrollView(
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      weather.name,
+                      style: const TextStyle(
+                          fontSize: 32, color: Colors.white, letterSpacing: -0.5),
                     ),
-                  ),
-                  SizedBox(height: 0.02 * size.height),
-                  SizedBox(
-                    height: 0.2 * size.height,
-                    width: 0.856 * size.width,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 0.14 * size.height,
-                              width: 0.3 * size.width,
-                              child: Image.asset(
-                                getWeatherImageById(weather.weather[0].id),
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 0.05 * size.width,
-                            ),
-                            Text(
-                              '${weather.main.temp.round()}°C',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 60,
-                              ),
-                            ),
-                          ],
-                        ),
-                        FittedBox(
-                          fit: BoxFit.contain,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    SizedBox(height: 0.02 * size.height),
+                    SizedBox(
+                      width: 0.45 * size.width,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: ElevatedButton(
+                          onPressed: _getLocationAndFetchWeather,
+                          child: const Row(
                             children: [
+                              Icon(
+                                Icons.location_on,
+                                color: Color(0xffacbaef),
+                                size: 20,
+                              ),
                               Text(
-                                '${weather.weather[0].description} | Lon:${weather.coord.lon.round()}°  Lat:${weather.coord.lat.round()}°',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
+                                'Buscar Ubicación',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 0.02 * size.height,
-                  ),
-                  Container(
-                    height: 0.3 * size.height,
-                    width: 0.856 * size.width,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: const Color.fromARGB(41, 255, 255, 255)),
-                        borderRadius: BorderRadius.circular(18.81),
-                        color: const Color.fromARGB(41, 255, 255, 255)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                    SizedBox(height: 0.02 * size.height),
+                    SizedBox(
+                      height: 0.2 * size.height,
+                      width: 0.856 * size.width,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Resumen:',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 0.14 * size.height,
+                                width: 0.3 * size.width,
+                                child: Image.asset(
+                                  getWeatherImageById(weather.weather[0].id),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 0.05 * size.width,
+                              ),
+                              Text(
+                                '${weather.main.temp.round()}°C',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 60,
+                                ),
+                              ),
+                            ],
+                          ),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${weather.weather[0].description} | Lon:${weather.coord.lon.round()}°  Lat:${weather.coord.lat.round()}°',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ResumenClima(
-                                size: size,
-                                informacion: '${weather.main.humidity}%',
-                                titulo: 'Humedad',
-                                icono: Icons.water_drop_outlined,
-                              ),
-                              ResumenClima(
-                                size: size,
-                                informacion: '${weather.main.pressure} hPa',
-                                titulo: 'Presión',
-                                icono: Icons.compress,
-                              ),
-                              ResumenClima(
-                                size: size,
-                                informacion: '${weather.wind.speed} m/s',
-                                titulo: 'Viento',
-                                icono: Icons.air,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ResumenClima(
-                                size: size,
-                                informacion:
-                                    '${weather.main.feelsLike.round()}°C',
-                                titulo: 'S. térmica',
-                                icono: Icons.sunny,
-                              ),
-                              ResumenClima(
-                                size: size,
-                                informacion: '${weather.clouds.all}%',
-                                titulo: 'Nubosidad',
-                                icono: Icons.cloud,
-                              ),
-                            ],
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 0.02 * size.height,
+                    ),
+                    Container(
+                      height: 0.3 * size.height,
+                      width: 0.856 * size.width,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: const Color.fromARGB(41, 255, 255, 255)),
+                          borderRadius: BorderRadius.circular(18.81),
+                          color: const Color.fromARGB(41, 255, 255, 255)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Resumen:',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ResumenClima(
+                                  size: size,
+                                  informacion: '${weather.main.humidity}%',
+                                  titulo: 'Humedad',
+                                  icono: Icons.water_drop_outlined,
+                                ),
+                                ResumenClima(
+                                  size: size,
+                                  informacion: '${weather.main.pressure} hPa',
+                                  titulo: 'Presión',
+                                  icono: Icons.compress,
+                                ),
+                                ResumenClima(
+                                  size: size,
+                                  informacion: '${weather.wind.speed} m/s',
+                                  titulo: 'Viento',
+                                  icono: Icons.air,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ResumenClima(
+                                  size: size,
+                                  informacion:
+                                      '${weather.main.feelsLike.round()}°C',
+                                  titulo: 'S. térmica',
+                                  icono: Icons.sunny,
+                                ),
+                                ResumenClima(
+                                  size: size,
+                                  informacion: '${weather.clouds.all}%',
+                                  titulo: 'Nubosidad',
+                                  icono: Icons.cloud,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 0.02 * size.height),
+                    SizedBox(
+                      height: 0.3 * size.height,
+                      width: 0.856 * size.width,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(18.81),
+                        child: FlutterMap(
+                          options: MapOptions(
+                            initialCenter:
+                                LatLng(weather.coord.lat, weather.coord.lon),
+                            initialZoom: 13.0,
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              subdomains: const ['a', 'b', 'c'],
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                point: LatLng(weather.coord.lat, weather.coord.lon),
+                                width: 80,
+                                height: 80,
+                                child: const Icon(
+                                  Icons.location_pin,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
+                              ),
+                              ],
+                            ),
+                          ],
+                        ), 
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             return const SizedBox.shrink();
