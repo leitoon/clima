@@ -12,6 +12,7 @@ class GradientScaffold extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xff97ABFF), Color(0xff123597)],

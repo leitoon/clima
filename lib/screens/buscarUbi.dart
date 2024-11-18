@@ -1,8 +1,6 @@
 import 'package:clima/models/climamodelo.dart';
 import 'package:clima/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -52,88 +50,92 @@ class _BuscarScreenState extends State<BuscarScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
+    print(_latController.text);
+    print(_lonController.text);
 
-    return GradientScaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: 0.049 * size.height, horizontal: 16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(onPressed: (){
-                Navigator.pop(context);
-              }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 30,)),
-              const Text(
-                'Buscar Ubicación',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Campo de entrada para la latitud
-              TextField(
-                controller: _latController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Latitud',
-                  labelStyle: TextStyle(color: Colors.white),
-                  hintText: 'Ingresa la latitud',
-                  hintStyle: TextStyle(color: Colors.white54),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white54),
+    return SafeArea(
+      child: GradientScaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: 0.01* size.height, horizontal: 16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(onPressed: (){
+                  Navigator.pop(context);
+                }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 30,)),
+                const Text(
+                  'Buscar Ubicación',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
-              // Campo de entrada para la longitud
-              TextField(
-                controller: _lonController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Longitud',
-                  labelStyle: TextStyle(color: Colors.white),
-                  hintText: 'Ingresa la longitud',
-                  hintStyle: TextStyle(color: Colors.white54),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white54),
+                const SizedBox(height: 16),
+                // Campo de entrada para la latitud
+                TextField(
+                  controller: _latController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Latitud',
+                    labelStyle: TextStyle(color: Colors.white),
+                    hintText: 'Ingresa la latitud',
+                    hintStyle: TextStyle(color: Colors.white54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white54),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 24),
-              // Botón de búsqueda
-              Center(
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _fetchWeather,
-                  child: _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text('Buscar'),
+                const SizedBox(height: 16),
+                // Campo de entrada para la longitud
+                TextField(
+                  controller: _lonController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Longitud',
+                    labelStyle: TextStyle(color: Colors.white),
+                    hintText: 'Ingresa la longitud',
+                    hintStyle: TextStyle(color: Colors.white54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white54),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 24),
-              // Mostrar error si existe
-              if (_errorMessage != null)
+                SizedBox(height: 24),
+                // Botón de búsqueda
                 Center(
-                  child: Text(
-                    _errorMessage!,
-                    style: TextStyle(color: Colors.redAccent, fontSize: 16),
-                    textAlign: TextAlign.center,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _fetchWeather,
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text('Buscar'),
                   ),
                 ),
-              // Mostrar los datos obtenidos
-              if (_weatherData != null) ...[
-                SizedBox(height: 16),
-                // Aquí puedes reutilizar tus widgets existentes para mostrar los datos
-                // Por ejemplo, el Container con 'Resumen:' y el mapa
-                _buildWeatherSummary(size),
-                SizedBox(height: 16),
-                _buildMap(size),
+                SizedBox(height: 24),
+                // Mostrar error si existe
+                if (_errorMessage != null)
+                  Center(
+                    child: Text(
+                      _errorMessage!,
+                      style: TextStyle(color: Colors.redAccent, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                // Mostrar los datos obtenidos
+                if (_weatherData != null) ...[
+                  SizedBox(height: 16),
+                  // Aquí puedes reutilizar tus widgets existentes para mostrar los datos
+                  // Por ejemplo, el Container con 'Resumen:' y el mapa
+                  _buildWeatherSummary(size),
+                  SizedBox(height: 16),
+                  _buildMap(size),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

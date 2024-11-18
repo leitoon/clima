@@ -153,35 +153,38 @@ class MainData {
 }
 
 class Sys {
-    final int type;
-    final int id;
-    final String country;
-    final int sunrise;
-    final int sunset;
+  final int? type;
+  final int? id;
+  final String? country;
+  final int? sunrise;
+  final int? sunset;
 
-    Sys({
-        required this.type,
-        required this.id,
-        required this.country,
-        required this.sunrise,
-        required this.sunset,
-    });
+  Sys({
+    this.type,
+    this.id,
+    this.country,
+    this.sunrise,
+    this.sunset,
+  });
 
-    factory Sys.fromJson(Map<String, dynamic> json) => Sys(
-        type: json["type"] ?? 0,
-        id: json["id"] ?? 0,
-        country: json["country"] ?? '',
-        sunrise: json["sunrise"] ?? 0,
-        sunset: json["sunset"] ?? 0,
+  factory Sys.fromJson(Map<String, dynamic> json) {
+    return Sys(
+      type: json['type'] as int?,
+      id: json['id'] as int?,
+      country: json['country'] as String?,
+      sunrise: json['sunrise'] as int?,
+      sunset: json['sunset'] as int?,
     );
+  }
 
-    Map<String, dynamic> toJson() => {
-        "type": type,
-        "id": id,
-        "country": country,
-        "sunrise": sunrise,
-        "sunset": sunset,
-    };
+  // Agrega este método
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'id': id,
+        'country': country,
+        'sunrise': sunrise,
+        'sunset': sunset,
+      };
 }
 
 class Weather {
