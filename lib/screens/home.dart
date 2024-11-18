@@ -2,6 +2,7 @@
 
 
 import 'package:clima/models/climamodelo.dart';
+import 'package:clima/otros/obtenerclimaimg.dart';
 import 'package:clima/peticiones/getclima.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -118,21 +119,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 0.02 * size.height),
                   SizedBox(
-                    height: 0.213 * size.height,
+                    height: 0.2 * size.height,
                     width: 0.856 * size.width,
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            
                             SizedBox(
                               height: 0.14 * size.height,
                               width: 0.3 * size.width,
-                              child: Image.asset(
-                                'assets/images/nublado.png',
+                              child:
+                              
+                               Image.asset(       
+                                getWeatherImageById(weather.weather[0].id),
                                 fit: BoxFit.contain,
                               ),
                             ),
+                            SizedBox(width: 0.05*size.width,),
                             Text(
                               '${weather.main.temp.round()}°C',
                               style: const TextStyle(
@@ -142,17 +147,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              '${weather.weather[0].description} | Lon:${weather.coord.lon}°  Lat:${weather.coord.lat}°',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
+                        FittedBox(
+                          fit: BoxFit.contain,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${weather.weather[0].description} | Lon:${weather.coord.lon.round()}°  Lat:${weather.coord.lat.round()}°',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -165,30 +173,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(18.81),
                       color: const Color.fromARGB(41, 255, 255, 255)
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Resumen:',style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),),
-                        Text('Humedad:${weather.main.humidity}',style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),),
-                        Text('Presion:${weather.main.pressure}',style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),),
-                        Text('Nivel del mar:${weather.main.seaLevel}',style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),),
-                        Text('Sensacion termica:${weather.main.feelsLike.round()}',style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Resumen:',style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),),
+                          Text('Humedad: ${weather.main.humidity}%',style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),),
+                          Text('Presion: ${weather.main.pressure}',style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),),
+                          Text('Nivel del mar: ${weather.main.seaLevel}',style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),),
+                          Text('Sensacion termica: ${weather.main.feelsLike.round()} °C',style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),),
+                        ],
+                      ),
                     ),
                   ),
                 ],
