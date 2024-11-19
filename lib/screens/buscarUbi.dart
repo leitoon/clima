@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:clima/models/climamodelo.dart';
 import 'package:clima/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -67,13 +66,14 @@ class _BuscarScreenState extends State<BuscarScreen> {
       _isLoading = true;
       _errorMessage = null;
     });
+  
 
     try {
       final double lat = double.parse(_latController.text.trim());
       final double lon = double.parse(_lonController.text.trim());
 
       // Llama a tu función para obtener el clima
-      WeatherResponse weather = await fetchWeather(lat, lon);
+      WeatherResponse weather = await fetchWeather(context, lat, lon);
 
       setState(() {
         _weatherData = weather;
@@ -88,6 +88,7 @@ class _BuscarScreenState extends State<BuscarScreen> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

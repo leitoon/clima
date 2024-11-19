@@ -16,16 +16,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {  
   late Future<WeatherResponse> futureWeather;
+  
   @override
   void initState() {
     super.initState();
     // Inicializamos la futura consulta del clima basada en la ubicación.
     futureWeather = _getLocationAndFetchWeather();
+    
+    
     // Configuración del controlador WebViewController
   }
+  
 
   Future<WeatherResponse> _getLocationAndFetchWeather() async {
+
+  
     try {
+      
       // Solicitar permisos
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
@@ -50,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           desiredAccuracy: LocationAccuracy.high);
 
       // Llamar a la API del clima con la latitud y longitud obtenidas
-      return fetchWeather(position.latitude, position.longitude);
+      return fetchWeather(context, position.latitude, position.longitude);
     } catch (e) {
       // Manejo de errores
       print("Error al obtener la ubicación: $e");
