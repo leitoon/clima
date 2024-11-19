@@ -64,6 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
       throw Exception("No se pudo obtener la ubicación: $e");
     }
   }
+  void _retryFetchWeather() {
+    setState(() {
+      futureWeather = _getLocationAndFetchWeather();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else if (snapshot.hasError) {
               return Center(
-                child: Text(
-                  'Error: ${snapshot.error}',
-                  style: const TextStyle(color: Colors.white),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Error: revisar conexión a internet/Activar ubicación',
+                      style: TextStyle(color: Colors.white,fontSize: 18),
+                    ),
+                    IconButton(
+                      color: Colors.white,
+                    onPressed: _retryFetchWeather,
+                    icon: const Icon(Icons.refresh,size: 50,color: Colors.red,),
+                    tooltip: 'Reintentar',
+                  ),
+                  ],
                 ),
+                
               );
             } else if (snapshot.hasData) {
               final weather = snapshot.data!;
@@ -279,6 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ), 
                       ),
                     ),
+                    const SizedBox(height: 50,)
                   ],
                 ),
               );
