@@ -49,6 +49,10 @@
 		<string>We need your location to show weather information.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 		<string>We need your location to show weather information.</string>
+	<key>NSAppTransportSecurity</key>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+	</dict>
 
 </dict>
 </plist>
