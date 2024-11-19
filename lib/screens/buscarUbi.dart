@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:clima/models/climamodelo.dart';
 import 'package:clima/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../peticiones/getclima.dart';
 
@@ -19,6 +22,45 @@ class _BuscarScreenState extends State<BuscarScreen> {
   WeatherResponse? _weatherData;
   bool _isLoading = false;
   String? _errorMessage;
+
+  void _saveToFavorites() async {
+    if (_weatherData == null) return;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Obtener la lista actual de favoritos
+    List<String> favorites = prefs.getStringList('favorites') ?? [];
+
+    // Crear un mapa con los datos a guardar
+    Map<String, dynamic> favoriteData = {
+      'lat': _weatherData!.coord.lat,
+      'lon': _weatherData!.coord.lon,
+      'name': _weatherData!.name,
+    };
+
+    // Convertir el mapa a una cadena JSON
+    String favoriteJson = json.encode(favoriteData);
+
+    // Agregar el nuevo favorito a la lista
+    favorites.add(favoriteJson);
+
+    // Guardar la lista actualizada en SharedPreferences
+    await prefs.setStringList('favorites', favorites);
+
+    // Mostrar un mensaje al usuario
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Guardado en Favoritos')),
+    );
+    setState(() {
+      _latController.clear();
+      _lonController.clear();
+      // Reiniciar _weatherData a null
+      _weatherData = null;
+
+      // Opcionalmente, también puedes limpiar el mensaje de error si lo deseas
+      _errorMessage = null;
+    });
+  }
 
   Future<void> _fetchWeather() async {
     setState(() {
@@ -50,34 +92,73 @@ class _BuscarScreenState extends State<BuscarScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
-    print(_latController.text);
-    print(_lonController.text);
+    //print(_latController.text);
+    // print(_lonController.text);
 
     return SafeArea(
       child: GradientScaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(
-              vertical: 0.01* size.height, horizontal: 16.0),
+              vertical: 0.01 * size.height, horizontal: 16.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(onPressed: (){
-                  Navigator.pop(context);
-                }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,size: 30,)),
-                const Text(
-                  'Buscar Ubicación',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Buscar Ubicación',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'favoritos');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15),
+                        backgroundColor: Colors.white,
+                      ),
+                      child: const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.favorite,
+                            color: Color(0xff123597),
+                            size: 15,
+                          ),
+                          Text(
+                            'Favoritos',
+                            style: TextStyle(
+                              color: Color(0xff123597),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 // Campo de entrada para la latitud
                 TextField(
                   controller: _latController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: 'Latitud',
@@ -93,7 +174,8 @@ class _BuscarScreenState extends State<BuscarScreen> {
                 // Campo de entrada para la longitud
                 TextField(
                   controller: _lonController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: 'Longitud',
@@ -105,34 +187,47 @@ class _BuscarScreenState extends State<BuscarScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 // Botón de búsqueda
                 Center(
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _fetchWeather,
                     child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text('Buscar'),
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Buscar'),
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 // Mostrar error si existe
                 if (_errorMessage != null)
                   Center(
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: Colors.redAccent, fontSize: 16),
+                      style: const TextStyle(
+                          color: Colors.redAccent, fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   ),
                 // Mostrar los datos obtenidos
                 if (_weatherData != null) ...[
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // Aquí puedes reutilizar tus widgets existentes para mostrar los datos
                   // Por ejemplo, el Container con 'Resumen:' y el mapa
                   _buildWeatherSummary(size),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   _buildMap(size),
+                  const SizedBox(height: 16),
+
+                  Center(
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        _saveToFavorites();
+                      },
+                      icon: const Icon(Icons.favorite),
+                      label: const Text('Guardar en Favoritos'),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
                 ],
               ],
             ),
@@ -156,7 +251,8 @@ class _BuscarScreenState extends State<BuscarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Ciudad: ${weather.name} - ${weather.weather[0].description}', style: _summaryTitleStyle),
+            Text('Ciudad: ${weather.name} - ${weather.weather[0].description}',
+                style: _summaryTitleStyle),
             const SizedBox(height: 8),
             Text('Resumen:', style: _summaryTitleStyle),
             const SizedBox(height: 8),
@@ -184,7 +280,7 @@ class _BuscarScreenState extends State<BuscarScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

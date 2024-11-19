@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'home': (_) => HomeScreen(),
           'buscar': (_) => BuscarScreen(),
+          'favoritos': (_) => FavoritesScreen(),
         },
     );
   }

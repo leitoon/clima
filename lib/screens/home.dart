@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                     
                     Text(
                       weather.name,
                       style: const TextStyle(
