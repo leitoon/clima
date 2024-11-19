@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return GradientScaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.049 * size.height),
+        padding: EdgeInsets.only(top: 0.049 * size.height),
         child: FutureBuilder<WeatherResponse>(
           future: futureWeather,
           builder: (context, snapshot) {

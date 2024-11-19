@@ -94,8 +94,8 @@ class _BuscarScreenState extends State<BuscarScreen> {
                 TextField(
                   controller: _lonController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: 'Longitud',
                     labelStyle: TextStyle(color: Colors.white),
                     hintText: 'Ingresa la longitud',
