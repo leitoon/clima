@@ -96,11 +96,26 @@ Almacenamiento Local: Los favoritos se almacenan utilizando SharedPreferences, l
 
 Manejo de Errores: La aplicación maneja errores como falta de internet y permisos negados para mejorar la experiencia del usuario.
 
-# Capturas de Pantalla
+## Capturas de Pantalla
 
+### HomeScreen
 HomeScreen: Muestra el clima actual con un botón para buscar nuevas ubicaciones y muestra un mapa.
 
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/user-attachments/assets/796d58dc-a9fa-430f-9770-560e4882525b" alt="simulator screenshot" width="300"/>
+</div>
+
+### BuscarScreen
 BuscarScreen: Permite buscar por coordenadas y guardar como favorito.
 
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/user-attachments/assets/aa80b4ed-bb10-4f4e-8341-17c7ce363591" alt="simulator screenshot" width="300"/>
+</div>
+
+### FavoritesScreen
 FavoritesScreen: Muestra las ubicaciones guardadas y permite eliminar favoritos.
+
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/user-attachments/assets/8d70523f-e128-4fd6-99d9-1440dbf9d609" alt="simulator screenshot" width="300"/>
+</div>
 
